@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <!-- تحميل الخطوط والموارد بشكل أمثل -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Facebook Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '23990098767264674'); 
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" 
+    src="https://www.facebook.com/tr?id=23990098767264674&ev=PageView&noscript=1"/>
+  </noscript>
+  <link rel="stylesheet" href="form-style.css">
+</head>
+<body>
+  <div class="order-container">
+    <div class="form-header">
+      <h2>أدخل معلوماتك أسفله التوصيل متوفر 58 ولاية والدفع عند الاستلام</h2>
+    </div>
+    
+    <div class="form-body">
+      <form id="orderForm">
+        <div class="input-group">
+          <label for="name">الاسم الكامل</label>
+          <input type="text" id="name" placeholder="أدخل اسمك الكامل" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="phone">رقم الهاتف</label>
+          <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" required 
+                 pattern="[0]{1}[5-7]{1}[0-9]{8}" style="text-align: right;">
+        </div>
+        
+        <div class="input-group">
+  <label for="wilaya">الولاية</label>
+  <select id="wilaya" required>
+    <option value="">اختر ولايتك</option>
+    <!-- سيتم تعبئة الخيارات عبر JavaScript -->
+  </select>
+</div>
+
+<div class="input-group">
+  <label for="commune">البلدية</label>
+  <select id="commune" required disabled>
+    <option value="">اختر بلديتك</option>
+    <!-- سيتم تعبئة الخيارات عند اختيار الولاية -->
+  </select>
+</div>
+        
+        <div class="input-group">
+          <label for="address">العنوان بالتفصيل</label>
+          <input type="text" id="address" placeholder="الحي، الشارع، رقم المنزل" required>
+        </div>
+
+        <div class="input-group">
+          <label>طريقة التوصيل</label>
+          <div class="radio-group">
+            <input type="radio" id="deliveryHome" name="delivery" value="للمنزل" checked>
+            <label for="deliveryHome">للمنزل</label>
+            <input type="radio" id="deliveryOffice" name="delivery" value="للمكتب">
+            <label for="deliveryOffice">للمكتب</label>
+          </div>
+        </div>
+
+        <div class="order-summary">
+          <div class="price-row">
+            <span>سعر المنتج:</span>
+            <span>2900 دج</span>
+          </div>
+          <div class="price-row">
+            <span>سعر التوصيل:</span>
+            <span id="deliveryPrice">اختر الولاية</span>
+          </div>
+          <div class="price-row total-price">
+            <span>المجموع:</span>
+            <span id="totalPrice">-- دج</span>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 15px; align-items: center;">
+          <div class="quantity-control">
+            <button type="button" onclick="changeQuantity(-1)">-</button>
+            <input type="text" id="quantity" value="1" readonly>
+            <button type="button" onclick="changeQuantity(1)">+</button>
+          </div>
+          <button type="submit" class="submit-btn">إرسال الطلب</button>
+        </div>
+        <script src="form-script.js"></script>
+  <a class="whatsapp-button" href="https://wa.me/213797319624" target="_blank">
+    <img src="https://sarlofficesolution.com.dz/wp-content/uploads/2025/06/whatsapp.png" alt="واتساب">
+  </a>
+</body>
+</html>
