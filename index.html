@@ -519,7 +519,6 @@ const prices = {
   '58': 1000
 };
 
-
 // الثوابت والمتغيرات
 const productPrice = 2400;
 const freeShippingThreshold = 50000;
@@ -694,12 +693,6 @@ function submitOrder(e) {
     });
 }
 
-// تحميل الصفحة
-window.addEventListener("load", function() {
-  const loader = document.getElementById("loader");
-  loader.style.display = "none";
-});
-
 // زر الطلب العائم
 document.addEventListener("DOMContentLoaded", function() {
   const orderNowBtn = document.getElementById("orderNowBtn");
@@ -720,6 +713,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 });
+
           <a class="whatsapp-button" href="https://wa.me/213770885813" target="_blank" title="تواصل عبر واتساب">
   <img src="whatsapp.png" alt="WhatsApp"/>
 </a>
