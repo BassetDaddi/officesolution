@@ -317,29 +317,6 @@ button.submit-btn {
         flex-direction: column;
       }
     }
-    
-    /* تكييف النموذج مع ووكومرس */
-.custom-order-form-container {
-    clear: both;
-    margin: 20px 0;
-    padding: 15px;
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.woocommerce div.product .custom-order-form-container {
-    width: 100%;
-    float: none;
-    margin-top: 30px;
-}
-
-@media (min-width: 768px) {
-    .woocommerce div.product .custom-order-form-container {
-        width: 48%;
-        float: right;
-        margin-left: 4%;
-    }
 }
 </style>
 
@@ -526,8 +503,70 @@ const prices = {
   '58': 1000
 };
 
-// Constants and variables
-const productPrice = 7500;
+// أسعار التوصيل لكل ولاية (للمنزل فقط الآن)
+const prices = {
+  '01': 1000,
+  '02': 600,
+  '03': 750,
+  '04': 700,
+  '05': 650,
+  '06': 550,
+  '07': 800,
+  '08': 1000,
+  '09': 250,
+  '10': 600,
+  '11': 1200,
+  '12': 700,
+  '13': 700,
+  '14': 700,
+  '15': 550,
+  '16': 250,
+  '17': 700,
+  '18': 600,
+  '19': 550,
+  '20': 750,
+  '21': 650,
+  '22': 650,
+  '23': 550,
+  '24': 700,
+  '25': 550,
+  '26': 600,
+  '27': 600,
+  '28': 650,
+  '29': 650,
+  '30': 800,
+  '31': 500,
+  '32': 850,
+  '33': 1300,
+  '34': 600,
+  '35': 500,
+  '36': 700,
+  '37': 1300,
+  '38': 700,
+  '39': 800,
+  '40': 700,
+  '41': 800,
+  '42': 500,
+  '43': 650,
+  '44': 600,
+  '45': 900,
+  '46': 600,
+  '47': 800,
+  '48': 600,
+  '49': 1200,
+  '50': 1400,
+  '51': 800,
+  '52': 1000,
+  '53': 1400,
+  '54': 1550,
+  '55': 850,
+  '56': 900,
+  '57': 900,
+  '58': 900
+};
+
+// الثوابت والمتغيرات
+const productPrice = 2400;
 const freeShippingThreshold = 50000;
 const wilayaSelect = document.getElementById('wilayaSelect');
 const communeSelect = document.getElementById('communeSelect');
@@ -537,7 +576,7 @@ const quantityInput = document.getElementById('quantity');
 const phoneInput = document.getElementById('phone');
 const orderForm = document.getElementById('orderForm');
 const submitBtn = document.getElementById('submitBtn');
-          
+
 // تحميل بيانات الولايات والبلديات
 document.addEventListener('DOMContentLoaded', function() {
   loadWilayasAndCommunes();
@@ -698,67 +737,6 @@ function submitOrder(e) {
       submitBtn.disabled = false;
       submitBtn.textContent = 'إرسال الطلب';
     });
-}
-
-// معرض الصور
-function initImageGallery() {
-  const images = document.querySelectorAll('.gallery-image');
-  const indicators = document.querySelectorAll('.gallery-indicator');
-  const prevBtn = document.querySelector('.gallery-prev');
-  const nextBtn = document.querySelector('.gallery-next');
-  let currentIndex = 0;
-  let interval;
-  
-  function showImage(index) {
-    images.forEach(img => img.classList.remove('active'));
-    indicators.forEach(ind => ind.classList.remove('active'));
-    images[index].classList.add('active');
-    indicators[index].classList.add('active');
-    currentIndex = index;
-  }
-  
-  function nextImage() {
-    let newIndex = (currentIndex + 1) % images.length;
-    showImage(newIndex);
-  }
-  
-  function prevImage() {
-    let newIndex = (currentIndex - 1 + images.length) % images.length;
-    showImage(newIndex);
-  }
-  
-  function startSlider() {
-    interval = setInterval(nextImage, 3000);
-  }
-  
-  function stopSlider() {
-    clearInterval(interval);
-  }
-  
-  nextBtn.addEventListener('click', function() {
-    nextImage();
-    stopSlider();
-    startSlider();
-  });
-  
-  prevBtn.addEventListener('click', function() {
-    prevImage();
-    stopSlider();
-    startSlider();
-  });
-  
-  indicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', function() {
-      showImage(index);
-      stopSlider();
-      startSlider();
-    });
-  });
-  
-  startSlider();
-  
-  document.querySelector('.image-gallery').addEventListener('mouseenter', stopSlider);
-  document.querySelector('.image-gallery').addEventListener('mouseleave', startSlider);
 }
 
 // تحميل الصفحة
