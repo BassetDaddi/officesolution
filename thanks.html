@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شكراً لك على طلبك</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            direction: rtl;
+        }
+        .thank-you-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+        .checkmark {
+            color: #4CAF50;
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .order-number {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+            direction: ltr;
+        }
+        .contact-info {
+            margin-top: 30px;
+            font-size: 16px;
+        }
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-container">
+        <div class="checkmark">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>شكراً لك على طلبك!</h1>
+        <p>تم استلام طلبك بنجاح وسنتصل بك خلال 24 ساعة لتأكيد التفاصيل</p>
+        
+        <div class="order-number">
+            رقم الطلب: #<span id="orderId">${Math.floor(100000 + Math.random() * 900000)}</span>
+        </div>
+        
+        <p>لأي استفسار، لا تتردد في التواصل معنا عبر الواتساب</p>
+        
+        <a href="https://wa.me/213770885813" class="whatsapp-btn">
+            <i class="fab fa-whatsapp"></i> تواصل عبر الواتساب
+        </a>
+        
+        <div class="contact-info">
+            <p>هاتف: 0770885813</p>
+            <p>البريد الإلكتروني: contact@officesolution.dz</p>
+        </div>
+    </div>
+
+    <script>
+        // Generate random order number
+        document.getElementById('orderId').textContent = Math.floor(100000 + Math.random() * 900000);
+    </script>
+</body>
+</html>
