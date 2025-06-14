@@ -32,14 +32,22 @@
 
     /* حاوية النموذج */
     .order-container {
-      max-width: 500px;
-      margin: 30px auto;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      overflow: hidden;
-      border-top: 5px solid var(--primary-color);
-    }
+  max-width: 500px;
+  width: 100%;
+  margin: 30px auto;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  border-top: 5px solid var(--primary-color);
+}
+
+@media (max-width: 600px) {
+  .order-container {
+    margin: 10px;
+    border-radius: 10px;
+  }
+}
 
     .form-header {
       padding: 15px;
