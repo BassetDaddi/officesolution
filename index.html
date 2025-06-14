@@ -6,7 +6,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
  <style>/* المتغيرات العامة */
     :root {
       --primary-color: #F7941D; /* اللون البرتقالي الأساسي */
@@ -82,13 +82,6 @@ button.submit-btn {
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(74, 107, 255, 0.2);
 }
-
-    /* مجموعة الراديو */
-    .radio-group {
-      display: flex;
-      gap: 10px;
-      margin: 15px 0;
-    }
 
     .radio-group input[type="radio"] {
       display: none;
@@ -421,31 +414,47 @@ const prices = {
   '58': 1000
 };
 
-// Load wilayas and communes data
+// Constants and variables
+const productPrice = 2400;
+const freeShippingThreshold = 50000;
+const wilayaSelect = document.getElementById('wilayaSelect');
+const communeSelect = document.getElementById('communeSelect');
+const deliveryPriceEl = document.getElementById('deliveryPrice');
+const totalPriceEl = document.getElementById('totalPrice');
+const quantityInput = document.getElementById('quantity');
+const phoneInput = document.getElementById('phone');
+const orderForm = document.getElementById('orderForm');
+const submitBtn = document.getElementById('submitBtn');
+          
 document.addEventListener('DOMContentLoaded', function() {
+  // Set landing page image
+  const landingImg = document.createElement('img');
+  landingImg.src = 'landingpage.jpg';
+  landingImg.alt = 'Product Image';
+  landingImg.style.width = '100%';
+  landingImg.style.maxHeight = '500px';
+  landingImg.style.objectFit = 'cover';
+  document.querySelector('.product-image').prepend(landingImg);
+
   loadWilayasAndCommunes();
   setupEventListeners();
-  initImageGallery();
   
-  // Initialize quantity change listeners
+  // Initialize quantity controls
   document.querySelector('.quantity-minus').addEventListener('click', () => changeQuantity(-1));
   document.querySelector('.quantity-plus').addEventListener('click', () => changeQuantity(1));
   quantityInput.addEventListener('input', updatePrices);
 });
 
-// Load wilayas and communes from JSON file
+// Load wilayas and communes
 function loadWilayasAndCommunes() {
   fetch('communes.json')
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
       populateWilayas(data);
       setupWilayaChangeListener(data);
     })
     .catch(error => {
-      console.error('Error loading the data:', error);
+      console.error('Error loading data:', error);
       wilayaSelect.innerHTML = '<option value="">خطأ في تحميل البيانات</option>';
     });
 }
@@ -454,19 +463,11 @@ function loadWilayasAndCommunes() {
 function populateWilayas(data) {
   wilayaSelect.innerHTML = '<option value="">اختر الولاية التوصيل للمنزل</option>';
   
-  const wilayasMap = new Map();
-  data.forEach(item => {
-    if (!wilayasMap.has(item.wilaya_code)) {
-      wilayasMap.set(item.wilaya_code, {
-        code: item.wilaya_code,
-        name: item.wilaya_name
-      });
-    }
-  });
+  const uniqueWilayas = [...new Map(data.map(item => 
+    [item.wilaya_code, {code: item.wilaya_code, name: item.wilaya_name}])).values()]
+    .sort((a, b) => a.code.localeCompare(b.code));
 
-  const sortedWilayas = Array.from(wilayasMap.values()).sort((a, b) => a.code.localeCompare(b.code));
-
-  sortedWilayas.forEach(wilaya => {
+  uniqueWilayas.forEach(wilaya => {
     const option = document.createElement('option');
     option.value = wilaya.code;
     option.textContent = `${wilaya.code} - ${wilaya.name}`;
@@ -481,22 +482,15 @@ function setupWilayaChangeListener(data) {
     communeSelect.innerHTML = '<option value="">اختر البلدية</option>';
     communeSelect.disabled = !selectedCode;
 
-    if (!selectedCode) {
-      updatePrices();
-      return;
+    if (selectedCode) {
+      data.filter(item => item.wilaya_code === selectedCode)
+        .forEach(item => {
+          const option = document.createElement('option');
+          option.value = item.commune_name;
+          option.textContent = item.commune_name;
+          communeSelect.appendChild(option);
+        });
     }
-
-    const communes = data.filter(item => item.wilaya_code === selectedCode);
-    
-    if (communes.length > 0) {
-      communes.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.commune_name;
-        option.textContent = item.commune_name;
-        communeSelect.appendChild(option);
-      });
-    }
-    
     updatePrices();
   });
 
@@ -508,25 +502,21 @@ function setupEventListeners() {
   orderForm.addEventListener('submit', submitOrder);
 }
 
-// Update prices based on selections
+// Update prices
 function updatePrices() {
   const wilaya = wilayaSelect.value;
   const quantity = parseInt(quantityInput.value) || 0;
   const subtotal = productPrice * quantity;
   
   if (wilaya && prices[wilaya]) {
-    let deliveryPrice = prices[wilaya];
-    let total = subtotal + deliveryPrice;
+    let deliveryPrice = subtotal >= freeShippingThreshold ? 0 : prices[wilaya];
+    let total = subtotal + (subtotal >= freeShippingThreshold ? 0 : prices[wilaya]);
     
-    if (subtotal >= freeShippingThreshold) {
-      deliveryPrice = 0;
-      total = subtotal;
-      deliveryPriceEl.innerHTML = '<span style="text-decoration:line-through">' + prices[wilaya] + ' دج</span> 0 دج';
-    } else {
-      deliveryPriceEl.textContent = deliveryPrice + ' دج';
-    }
+    deliveryPriceEl.innerHTML = subtotal >= freeShippingThreshold 
+      ? `<span style="text-decoration:line-through">${prices[wilaya]} دج</span> 0 دج` 
+      : `${deliveryPrice} دج`;
     
-    totalPriceEl.textContent = total + ' دج';
+    totalPriceEl.textContent = `${total} دج`;
   } else {
     deliveryPriceEl.textContent = 'اختر الولاية';
     totalPriceEl.textContent = '--';
@@ -546,92 +536,82 @@ function changeQuantity(change) {
   }
 }
 
-// Submit order
+// Submit order (fixed version)
 function submitOrder(e) {
   e.preventDefault();
   
   // Validate form
-  const name = document.getElementById('name').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const wilaya = wilayaSelect.value;
-  const commune = communeSelect.value;
-  const address = document.getElementById('address').value.trim();
-  
-  if (!name || !phone || !wilaya || !commune || !address) {
-    alert('الرجاء ملء جميع الحقول المطلوبة');
-    return;
-  }
-  
-  // Format phone number (remove spaces and special characters)
-  const formattedPhone = phone.replace(/\D/g, '');
-  
-  // Disable submit button and show loading state
+  const requiredFields = [
+    {field: document.getElementById('name'), name: 'الاسم'},
+    {field: document.getElementById('phone'), name: 'رقم الهاتف'},
+    {field: wilayaSelect, name: 'الولاية'},
+    {field: communeSelect, name: 'البلدية'},
+    {field: document.getElementById('address'), name: 'العنوان'}
+  ];
+
+  let isValid = true;
+  requiredFields.forEach(({field, name}) => {
+    if (!field.value.trim()) {
+      alert(`الرجاء إدخال ${name}`);
+      isValid = false;
+      field.focus();
+    }
+  });
+
+  if (!isValid) return;
+
+  // Prepare data
+  const formData = new FormData();
+  formData.append('productName', document.querySelector('h2').textContent.trim());
+  formData.append('name', document.getElementById('name').value.trim());
+  formData.append('phone', document.getElementById('phone').value.replace(/\D/g, ''));
+  formData.append('wilaya', wilayaSelect.options[wilayaSelect.selectedIndex].text);
+  formData.append('commune', communeSelect.value);
+  formData.append('address', document.getElementById('address').value.trim());
+  formData.append('deliveryPrice', deliveryPriceEl.textContent);
+  formData.append('totalPrice', totalPriceEl.textContent);
+  formData.append('quantity', quantityInput.value);
+
+  // Disable submit button and show loading
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-  
-  const wilayaText = wilayaSelect.options[wilayaSelect.selectedIndex].text;
-  const deliveryPrice = deliveryPriceEl.textContent;
-  const totalPrice = totalPriceEl.textContent;
-  const quantity = quantityInput.value;
-  
+
+  // Submit to Google Sheets
   const scriptURL = 'https://script.google.com/macros/s/AKfycbz-lFJDNcRdiG83Clxz8khntVXybN1HNwvI_EHf4IqWtbC6Z1aDAfE2HcgOutyWbx48/exec';
   
-  const formData = new FormData();
-  const productName = document.querySelector('h2').textContent;
-  
-  formData.append('productName', productName.trim());
-  formData.append('name', name);
-  formData.append('phone', formattedPhone);
-  formData.append('wilaya', wilayaText);
-  formData.append('commune', commune);
-  formData.append('address', address);
-  formData.append('deliveryPrice', deliveryPrice);
-  formData.append('totalPrice', totalPrice);
-  formData.append('quantity', quantity);
-  
-  fetch(scriptURL, { method: 'POST', body: formData })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response;
-    })
-    .then(() => {
-      window.location.href = 'thankyou.html';
-    })
-    .catch(error => {
-      console.error('Error submitting order:', error);
-      alert('حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى');
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = 'إرسال الطلب';
-    });
+  fetch(scriptURL, { 
+    method: 'POST', 
+    body: formData,
+    mode: 'no-cors' // Important for Google Apps Script
+  })
+  .then(() => {
+    window.location.href = 'thanks.html';
+  })
+  .catch(error => {
+    console.error('Error!', error.message);
+    alert('حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى');
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = 'إرسال الطلب';
+  });
 }
 
 // Floating order button
 document.addEventListener("DOMContentLoaded", function() {
   const orderNowBtn = document.getElementById("orderNowBtn");
-  const nameInput = document.getElementById("name");
-  const topBarHeight = document.querySelector('.top-bar')?.offsetHeight || 0;
-
   if (orderNowBtn) {
     orderNowBtn.addEventListener("click", function() {
+      const nameInput = document.getElementById("name");
+      const topBarHeight = document.querySelector('.top-bar')?.offsetHeight || 0;
       const topOffset = nameInput.getBoundingClientRect().top + window.scrollY - topBarHeight - 5;
       window.scrollTo({ top: topOffset, behavior: "smooth" });
       orderNowBtn.style.display = "none";
     });
 
     window.addEventListener('scroll', function() {
-      if (window.scrollY > 50) {
-        orderNowBtn.style.display = "none";
-      }
+      orderNowBtn.style.display = window.scrollY > 50 ? "none" : "block";
     });
   }
 });
-
-// Initialize image gallery (placeholder - implement your actual gallery logic)
-function initImageGallery() {
-  // Your image gallery implementation here
-}
     </script>
   <a class="whatsapp-button" href="https://wa.me/213797319624" target="_blank">
     <img src="https://sarlofficesolution.com.dz/wp-content/uploads/2025/06/whatsapp.png" alt="واتساب">
