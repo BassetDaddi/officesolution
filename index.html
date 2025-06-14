@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <link rel="icon" href="minilogo.png" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Solution</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- البار العلوي المعدل -->
+  <div class="top-bar">
+    <img src="logo.png" alt="شعار المتجر" class="top-bar-logo">
+    <div class="top-bar-content">
+      <p>التوصيل متوفر الى 58 ولاية</p>
+      <p>والدفع عند الاستلام، مرحبا بكم</p>
+    </div>
+    <div class="theme-switcher">
+      <button class="theme-toggle-ball" id="themeToggleBall">
+        <i class="fas fa-sun theme-icon sun-icon"></i>
+        <i class="fas fa-moon theme-icon moon-icon"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="loader">
+    <div class="spinner">
+      <img src="minilogo.png" alt="شعار" class="logo" />
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>حقيبة رياضية بجودة عالية من AOKING</h2>
+
+    <div class="delivery-estimate">التوصيل خلال يوم واحد حتى 5 ايام لا تنسى ترك الهاتف مفتوحا طيلة الوقت</div>
+    <div class="image-gallery">
+      <img src="1.jpg" class="gallery-image active" alt="Image 1">
+      <img src="2.jpg" class="gallery-image" alt="Image 2">
+      <img src="3.jpg" class="gallery-image" alt="Image 3">
+      <img src="4.jpg" class="gallery-image" alt="Image 4">
+      <img src="5.jpg" class="gallery-image" alt="Image 5">
+      <button class="gallery-nav gallery-prev"><i class="fas fa-chevron-right"></i></button>
+      <button class="gallery-nav gallery-next"><i class="fas fa-chevron-left"></i></button>
+      <div class="gallery-indicators">
+        <div class="gallery-indicator active" data-index="0"></div>
+        <div class="gallery-indicator" data-index="1"></div>
+        <div class="gallery-indicator" data-index="2"></div>
+        <div class="gallery-indicator" data-index="3"></div>
+        <div class="gallery-indicator" data-index="4"></div>
+      </div>
+    </div>
+    
+    <span style="font-weight: bold; color: var(--primary-color); font-size: 22px;">7500 دج</span> 
+    <span style="text-decoration: line-through; color: #6EC1E4; font-size: 18px; margin-left: 10px;">8200 دج</span>
+    <span id="countdown" style="color: #80c1e6; font-size: 20px; font-weight: bold; float: left;"></span>
+    
+    <form id="orderForm">
+      <div class="form-image-container">
+        <img src="description.jpg" alt="description" class="form-image">
+      </div>
+      <input type="text" id="name" placeholder="أدخل الاسم الكامل" required>
+      <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" required style="text-align: right;">
+      
+      <div class="location-selectors">
+        <select id="wilayaSelect" class="p-2 border rounded" required>
+          <option value="">اختر الولاية التوصيل للمنزل</option>
+        </select>
+
+        <select id="communeSelect" class="p-2 border rounded" required disabled>
+          <option value="">اختر البلدية</option>
+        </select>
+      </div>
+      
+      <input type="text" id="address" placeholder="أدخل العنوان بالتفصيل" required>
+      
+      <div class="trust-badges">
+        <div class="trust-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          دفع عند الاستلام
+        </div>
+        <div class="trust-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          ضمان الجودة
+        </div>
+        <div class="trust-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          دعم 24/7
+        </div>
+      </div>
+      
+      <div class="social-icons">
+        <a href="https://www.facebook.com/OfficeSolutionCarterie" target="_blank" class="social-icon facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://www.tiktok.com/@officesolution-dz" target="_blank" class="social-icon tiktok">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.instagram.com/officesolutions_dz/" target="_blank" class="social-icon instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.youtube.com/@OfficeSolution-dz" target="_blank" class="social-icon youtube">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+      
+      <div class="order-summary-section">
+        <div class="price-box">
+          <div>
+            <span>سعر المنتج:</span>
+            <span id="productPrice">7500</span>
+            <span>دج</span>
+          </div>
+          <div>
+            <span>سعر التوصيل:</span>
+            <span id="deliveryPrice">إختر الولاية</span>
+            <span>دج</span>
+          </div>
+          <div class="total-price">
+            <span>المجموع:</span>
+            <span id="totalPrice">--</span>
+            <span>دج</span>
+          </div>
+        </div>
+        
+        <div class="action-container">
+          <div class="quantity-control">
+            <button type="button" onclick="changeQuantity(-1)">-</button>
+            <input type="text" id="quantity" value="1" readonly>
+            <button type="button" onclick="changeQuantity(1)">+</button>
+          </div>
+          <button type="submit" class="submit-btn">إرسال الطلب</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <div class="copyright-footer" style="text-align: center; padding: 5px; color: var(--text-color); font-size: 12px; background-color: var(--background-color);">
+    كل الحقوق محفوظة لدى Copyright © 2025 - Office Solution
+  </div>
+  
+  <a class="whatsapp-button" href="https://wa.me/213797319624" target="_blank" title="تواصل عبر واتساب">
+    <img src="whatsapp.png" alt="WhatsApp"/>
+  </a>
+  
+  <button class="floating-order-btn" id="orderNowBtn">اطلب الآن</button>
+
+  <script>
+    // Countdown Timer
+    let duration = 23 * 3600 + 28 * 60 + 35; 
+
+    function startCountdown() {
+      const countdownEl = document.getElementById("countdown");
+
+      const interval = setInterval(() => {
+        const hours = String(Math.floor(duration / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((duration % 3600) / 60)).padStart(2, '0');
+        const seconds = String(duration % 60).padStart(2, '0');
+
+        countdownEl.textContent = `${hours}:${minutes}:${seconds}`;
+        duration--;
+
+        if (duration < 0) {
+          clearInterval(interval);
+          countdownEl.textContent = "العرض انتهى";
+        }
+      }, 1000);
+    } 
+    window.onload = startCountdown;
+
+    // Theme Switcher
+    const themeToggleBall = document.getElementById('themeToggleBall');
+    const body = document.body;
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
+
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark-mode');
+      sunIcon.style.opacity = '0';
+      sunIcon.style.transform = 'translateY(-20px)';
+      moonIcon.style.opacity = '1';
+      moonIcon.style.transform = 'translateY(0)';
+    }
+
+    themeToggleBall.addEventListener('click', function() {
+      body.classList.toggle('dark-mode');
+      
+      if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+        sunIcon.style.opacity = '0';
+        sunIcon.style.transform = 'translateY(-20px)';
+        moonIcon.style.opacity = '1';
+        moonIcon.style.transform = 'translateY(0)';
+      } else {
+        localStorage.setItem('theme', 'light');
+        sunIcon.style.opacity = '1';
+        sunIcon.style.transform = 'translateY(0)';
+        moonIcon.style.opacity = '0';
+        moonIcon.style.transform = 'translateY(20px)';
+      }
+    });
+
+    // Delivery Prices
+    const prices = {
+      '01': 1100, '02': 700, '03': 900, '04': 700, '05': 600,
+      '06': 600, '07': 800, '08': 1100, '09': 500, '10': 700,
+      '11': 1300, '12': 800, '13': 800, '14': 800, '15': 700,
+      '16': 500, '17': 900, '18': 600, '19': 400, '20': 800,
+      '21': 800, '22': 800, '23': 700, '24': 700, '25': 600,
+      '26': 700, '27': 700, '28': 700, '29': 700, '30': 1000,
+      '31': 700, '32': 1000, '33': 1300, '34': 600, '35': 700,
+      '36': 700, '37': 1300, '38': 800, '39': 900, '40': 700,
+      '41': 800, '42': 700, '43': 600, '44': 700, '45': 1000,
+      '46': 800, '47': 900, '48': 700, '49': 1300, '50': 1400,
+      '51': 900, '52': 1300, '53': 1300, '54': 1550, '55': 900,
+      '56': 900, '57': 900, '58': 1000
+    };
+
+    const productPrice = 7500;
+    const freeShippingThreshold = 50000;
+    const wilayaSelect = document.getElementById('wilayaSelect');
+    const communeSelect = document.getElementById('communeSelect');
+    const deliveryPriceEl = document.getElementById('deliveryPrice');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const quantityInput = document.getElementById('quantity');
+    const phoneInput = document.getElementById('phone');
+    const orderForm = document.getElementById('orderForm');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    // Load wilayas and communes
+    document.addEventListener('DOMContentLoaded', function() {
+      loadWilayasAndCommunes();
+      setupEventListeners();
+      initImageGallery();
+    });
+
+    // Load wilayas and communes from JSON
+    function loadWilayasAndCommunes() {
+      fetch('communes.json')
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          populateWilayas(data);
+          setupWilayaChangeListener(data);
+        })
+        .catch(error => {
+          console.error('Error loading the data:', error);
+          wilayaSelect.innerHTML = '<option value="">خطأ في تحميل البيانات</option>';
+        });
+    }
+
+    // Populate wilayas dropdown
+    function populateWilayas(data) {
+      wilayaSelect.innerHTML = '<option value="">اختر الولاية التوصيل للمنزل</option>';
+      
+      const wilayasMap = new Map();
+      data.forEach(item => {
+        if (!wilayasMap.has(item.wilaya_code)) {
+          wilayasMap.set(item.wilaya_code, {
+            code: item.wilaya_code,
+            name: item.wilaya_name
+          });
+        }
+      });
+
+      const sortedWilayas = Array.from(wilayasMap.values()).sort((a, b) => a.code.localeCompare(b.code));
+
+      sortedWilayas.forEach(wilaya => {
+        const option = document.createElement('option');
+        option.value = wilaya.code;
+        option.textContent = `${wilaya.code} - ${wilaya.name}`;
+        wilayaSelect.appendChild(option);
+      });
+    }
+
+    // Setup wilaya change listener
+    function setupWilayaChangeListener(data) {
+      wilayaSelect.addEventListener('change', function() {
+        const selectedCode = this.value;
+        communeSelect.innerHTML = '<option value="">اختر البلدية</option>';
+        communeSelect.disabled = !selectedCode;
+
+        if (!selectedCode) {
+          updatePrices();
+          return;
+        }
+
+        const communes = data.filter(item => item.wilaya_code === selectedCode);
+        
+        if (communes.length > 0) {
+          communes.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.commune_name;
+            option.textContent = item.commune_name;
+            communeSelect.appendChild(option);
+          });
+        }
+        
+        updatePrices();
+      });
+
+      communeSelect.addEventListener('change', updatePrices);
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      orderForm.addEventListener('submit', submitOrder);
+    }
+
+    // Update prices based on selections
+    function updatePrices() {
+      const wilaya = wilayaSelect.value;
+      const quantity = parseInt(quantityInput.value);
+      const subtotal = productPrice * quantity;
+      
+      if (wilaya && prices[wilaya]) {
+        let deliveryPrice = prices[wilaya];
+        let total = subtotal + deliveryPrice;
+        
+        if (subtotal >= freeShippingThreshold) {
+          deliveryPrice = 0;
+          total = subtotal;
+          deliveryPriceEl.innerHTML = '<span style="text-decoration:line-through">' + prices[wilaya] + '</span> 0';
+        } else {
+          deliveryPriceEl.textContent = deliveryPrice;
+        }
+        
+        totalPriceEl.textContent = total;
+      } else {
+        deliveryPriceEl.textContent = 'اختر الولاية';
+        totalPriceEl.textContent = '--';
+      }
+    }
+
+    // Change quantity
+    function changeQuantity(change) {
+      let current = parseInt(quantityInput.value);
+      let newVal = current + change;
+      
+      if (newVal >= 1 && newVal <= 10) {
+        quantityInput.value = newVal;
+        quantityInput.classList.add('highlight');
+        setTimeout(() => quantityInput.classList.remove('highlight'), 500);
+        updatePrices();
+      }
+    }
+
+    // Submit order
+    function submitOrder(e) {
+      e.preventDefault();
+      
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+      
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const wilaya = wilayaSelect.options[wilayaSelect.selectedIndex].text;
+      const commune = communeSelect.value;
+      const address = document.getElementById('address').value;
+      const deliveryPrice = deliveryPriceEl.textContent;
+      const totalPrice = totalPriceEl.textContent;
+      const quantity = quantityInput.value;
+      
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbz-lFJDNcRdiG83Clxz8khntVXybN1HNwvI_EHf4IqWtbC6Z1aDAfE2HcgOutyWbx48/exec';
+      
+      const formData = new FormData();
+      const productName = document.querySelector('h2').textContent;
+      
+      formData.append('productName', productName.trim());
+      formData.append('name', name);
+      formData.append('phone', phone);
+      formData.append('wilaya', wilaya);
+      formData.append('commune', commune);
+      formData.append('address', address);
+      formData.append('deliveryPrice', deliveryPrice);
+      formData.append('totalPrice', totalPrice);
+      formData.append('quantity', quantity);
+      
+      fetch(scriptURL, { method: 'POST', body: formData })
+        .then(response => {
+          window.location.href = 'thankyou.html';
+        })
+        .catch(error => {
+          console.error('حدث خطأ أثناء إرسال الطلب:', error);
+          alert('حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'إرسال الطلب';
+        });
+    }
+
+    // Image Gallery
+    function initImageGallery() {
+      const images = document.querySelectorAll('.gallery-image');
+      const indicators = document.querySelectorAll('.gallery-indicator');
+      const prevBtn = document.querySelector('.gallery-prev');
+      const nextBtn = document.querySelector('.gallery-next');
+      let currentIndex = 0;
+      let interval;
+      
+      function showImage(index) {
+        images.forEach(img => img.classList.remove('active'));
+        indicators.forEach(ind => ind.classList.remove('active'));
+        images[index].classList.add('active');
+        indicators[index].classList.add('active');
+        currentIndex = index;
+      }
+      
+      function nextImage() {
+        let newIndex = (currentIndex + 1) % images.length;
+        showImage(newIndex);
+      }
+      
+      function prevImage() {
+        let newIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(newIndex);
+      }
+      
+      function startSlider() {
+        interval = setInterval(nextImage, 3000);
+      }
+      
+      function stopSlider() {
+        clearInterval(interval);
+      }
+      
+      nextBtn.addEventListener('click', function() {
+        nextImage();
+        stopSlider();
+        startSlider();
+      });
+      
+      prevBtn.addEventListener('click', function() {
+        prevImage();
+        stopSlider();
+        startSlider();
+      });
+      
+      indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', function() {
+          showImage(index);
+          stopSlider();
+          startSlider();
+        });
+      });
+      
+      startSlider();
+      
+      document.querySelector('.image-gallery').addEventListener('mouseenter', stopSlider);
+      document.querySelector('.image-gallery').addEventListener('mouseleave', startSlider);
+    }
+
+    // Page Loader
+    window.addEventListener("load", function() {
+      const loader = document.getElementById("loader");
+      loader.style.display = "none";
+    });
+
+    // Floating Order Button
+    document.addEventListener("DOMContentLoaded", function() {
+      const orderNowBtn = document.getElementById("orderNowBtn");
+      const nameInput = document.getElementById("name");
+      const topBarHeight = document.querySelector('.top-bar').offsetHeight;
+
+      if (orderNowBtn) {
+        orderNowBtn.addEventListener("click", function() {
+          const topOffset = nameInput.getBoundingClientRect().top + window.scrollY - topBarHeight - 5;
+          window.scrollTo({ top: topOffset, behavior: "smooth" });
+          orderNowBtn.style.display = "none";
+        });
+
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 50) {
+            orderNowBtn.style.display = "none";
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
