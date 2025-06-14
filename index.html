@@ -277,11 +277,16 @@ button.submit-btn {
 <body>
   <div class="order-container">
     <div class="form-header">
-      <h2>أدخل معلوماتك أسفله التوصيل متوفر 58 ولاية والدفع عند الاستلام</h2>
+      <h2>أدخل معلوماتك أسفله التوصيل متوفر إلى 58 ولاية والدفع عند الاستلام</h2>
     </div>
+
     
-    <div class="form-body">
-      <form id="orderForm">
+    <!--<div class="form-body">
+      <form id="orderForm">-->
+
+         <span style="font-weight: bold; color: var(--primary-color); font-size: 26px;">7500 دج</span> 
+  <span style="text-decoration: line-through; color: #6EC1E4; font-size: 23px; margin-left: 10px;">8200 دج</span>
+        
         <div class="input-group">
           <label for="name">الاسم الكامل</label>
           <input type="text" id="name" placeholder="أدخل اسمك الكامل" required>
@@ -333,10 +338,25 @@ button.submit-btn {
       </div>
     </div>
 
+        <div class="social-icons">
+      <a href="https://www.facebook.com/profile.php?id=61576026925740" target="_blank" class="social-icon facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://www.tiktok.com/@dipostore.dz" target="_blank" class="social-icon tiktok">
+        <i class="fab fa-tiktok"></i>
+      </a>
+      <a href="https://www.instagram.com/dipo_store.dz/" target="_blank" class="social-icon instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://t.me/dipostorealgeria" target="_blank" class="social-icon telegram">
+        <i class="fab fa-telegram-plane"></i>
+      </a>
+    </div>
+
         <div class="order-summary">
           <div class="price-row">
             <span>سعر المنتج:</span>
-            <span>2900 دج</span>
+            <span>7500 دج</span>
           </div>
           <div class="price-row">
             <span>سعر التوصيل:</span>
@@ -356,10 +376,14 @@ button.submit-btn {
           </div>
           <button type="submit" class="submit-btn">إرسال الطلب</button>
         </div>
+        <div class="copyright-footer" style="text-align: center; padding: 5px; color: var(--text-color); font-size: 12px; background-color: var(--background-color);">
+ كل الحقوق محفوظة لدى Copyright © 2025 - Office Solution
+<!--</div>-->
+
 
         <script>
     // Constants and variables
-const productPrice = 2400;
+const productPrice = 7500;
 const freeShippingThreshold = 50000;
 const wilayaSelect = document.getElementById('wilayaSelect');
 const communeSelect = document.getElementById('communeSelect');
@@ -432,7 +456,7 @@ const prices = {
 };
 
 // Constants and variables
-const productPrice = 2400;
+const productPrice = 7500;
 const freeShippingThreshold = 50000;
 const wilayaSelect = document.getElementById('wilayaSelect');
 const communeSelect = document.getElementById('communeSelect');
