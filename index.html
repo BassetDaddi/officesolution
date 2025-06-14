@@ -538,19 +538,14 @@ const phoneInput = document.getElementById('phone');
 const orderForm = document.getElementById('orderForm');
 const submitBtn = document.getElementById('submitBtn');
           
-// Load wilayas and communes data
+// تحميل بيانات الولايات والبلديات
 document.addEventListener('DOMContentLoaded', function() {
   loadWilayasAndCommunes();
   setupEventListeners();
   initImageGallery();
-  
-  // Initialize quantity change listeners
-  document.querySelector('.quantity-minus').addEventListener('click', () => changeQuantity(-1));
-  document.querySelector('.quantity-plus').addEventListener('click', () => changeQuantity(1));
-  quantityInput.addEventListener('input', updatePrices);
 });
 
-// Load wilayas and communes from JSON file
+// تحميل بيانات الولايات والبلديات من ملف JSON
 function loadWilayasAndCommunes() {
   fetch('communes.json')
     .then(response => {
@@ -567,7 +562,7 @@ function loadWilayasAndCommunes() {
     });
 }
 
-// Populate wilayas dropdown
+// تعبئة قائمة الولايات
 function populateWilayas(data) {
   wilayaSelect.innerHTML = '<option value="">اختر الولاية التوصيل للمنزل</option>';
   
@@ -591,7 +586,7 @@ function populateWilayas(data) {
   });
 }
 
-// Setup wilaya change listener
+// إعداد مستمع لتغيير الولاية
 function setupWilayaChangeListener(data) {
   wilayaSelect.addEventListener('change', function() {
     const selectedCode = this.value;
@@ -620,15 +615,15 @@ function setupWilayaChangeListener(data) {
   communeSelect.addEventListener('change', updatePrices);
 }
 
-// Setup event listeners
+// إعداد مستمعات الأحداث
 function setupEventListeners() {
   orderForm.addEventListener('submit', submitOrder);
 }
 
-// Update prices based on selections
+// تحديث الأسعار بناءً على الاختيارات
 function updatePrices() {
   const wilaya = wilayaSelect.value;
-  const quantity = parseInt(quantityInput.value) || 0;
+  const quantity = parseInt(quantityInput.value);
   const subtotal = productPrice * quantity;
   
   if (wilaya && prices[wilaya]) {
@@ -638,22 +633,21 @@ function updatePrices() {
     if (subtotal >= freeShippingThreshold) {
       deliveryPrice = 0;
       total = subtotal;
-      deliveryPriceEl.innerHTML = '<span style="text-decoration:line-through">' + prices[wilaya] + ' دج</span> 0 دج';
+      deliveryPriceEl.innerHTML = '<span style="text-decoration:line-through">' + prices[wilaya] + '</span> 0';
     } else {
-      deliveryPriceEl.textContent = deliveryPrice + ' دج';
+      deliveryPriceEl.textContent = deliveryPrice;
     }
     
-    totalPriceEl.textContent = total + ' دج';
+    totalPriceEl.textContent = total;
   } else {
     deliveryPriceEl.textContent = 'اختر الولاية';
     totalPriceEl.textContent = '--';
   }
 }
 
-
-// Change quantity
+// تغيير الكمية
 function changeQuantity(change) {
-  let current = parseInt(quantityInput.value) || 0;
+  let current = parseInt(quantityInput.value);
   let newVal = current + change;
   
   if (newVal >= 1 && newVal <= 10) {
@@ -664,85 +658,139 @@ function changeQuantity(change) {
   }
 }
 
-// Submit order (fixed version)
 function submitOrder(e) {
   e.preventDefault();
   
-  // Validate form
-  const requiredFields = [
-    {field: document.getElementById('name'), name: 'الاسم'},
-    {field: document.getElementById('phone'), name: 'رقم الهاتف'},
-    {field: wilayaSelect, name: 'الولاية'},
-    {field: communeSelect, name: 'البلدية'},
-    {field: document.getElementById('address'), name: 'العنوان'}
-  ];
-
-  let isValid = true;
-  requiredFields.forEach(({field, name}) => {
-    if (!field.value.trim()) {
-      alert(`الرجاء إدخال ${name}`);
-      isValid = false;
-      field.focus();
-    }
-  });
-
-  if (!isValid) return;
-
-  // Prepare data
-  const formData = new FormData();
-  formData.append('productName', document.querySelector('h2').textContent.trim());
-  formData.append('name', document.getElementById('name').value.trim());
-  formData.append('phone', document.getElementById('phone').value.replace(/\D/g, ''));
-  formData.append('wilaya', wilayaSelect.options[wilayaSelect.selectedIndex].text);
-  formData.append('commune', communeSelect.value);
-  formData.append('address', document.getElementById('address').value.trim());
-  formData.append('deliveryPrice', deliveryPriceEl.textContent);
-  formData.append('totalPrice', totalPriceEl.textContent);
-  formData.append('quantity', quantityInput.value);
-
-  // Disable submit button and show loading
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-
-  // Submit to Google Sheets
+  
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const wilaya = wilayaSelect.options[wilayaSelect.selectedIndex].text;
+  const commune = communeSelect.value; // تغيير من .text إلى .value
+  const address = document.getElementById('address').value;
+  const deliveryPrice = deliveryPriceEl.textContent;
+  const totalPrice = totalPriceEl.textContent;
+  const quantity = quantityInput.value;
+  
   const scriptURL = 'https://script.google.com/macros/s/AKfycbz-lFJDNcRdiG83Clxz8khntVXybN1HNwvI_EHf4IqWtbC6Z1aDAfE2HcgOutyWbx48/exec';
   
-  fetch(scriptURL, { 
-    method: 'POST', 
-    body: formData,
-    mode: 'no-cors' // Important for Google Apps Script
-  })
-  .then(() => {
-    window.location.href = 'thanks.html';
-  })
-  .catch(error => {
-    console.error('Error!', error.message);
-    alert('حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى');
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = 'إرسال الطلب';
-  });
+  const formData = new FormData();
+  const productName = document.querySelector('h2').textContent; // الحصول على اسم المنتج من العنوان h2
+  
+  formData.append('productName', productName.trim()); // إضافة trim() لإزالة المسافات الزائدة
+  formData.append('name', name);
+  formData.append('phone', phone);
+  formData.append('wilaya', wilaya);
+  formData.append('commune', commune); // إرسال قيمة البلدية بدلاً من النص
+  formData.append('address', address);
+  formData.append('deliveryPrice', deliveryPrice);
+  formData.append('totalPrice', totalPrice);
+  formData.append('quantity', quantity);
+  
+  fetch(scriptURL, { method: 'POST', body: formData })
+    .then(response => {
+      window.location.href = 'thankyou.html';
+    })
+    .catch(error => {
+      console.error('حدث خطأ أثناء إرسال الطلب:', error);
+      alert('حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'إرسال الطلب';
+    });
 }
 
-// Floating order button
+// معرض الصور
+function initImageGallery() {
+  const images = document.querySelectorAll('.gallery-image');
+  const indicators = document.querySelectorAll('.gallery-indicator');
+  const prevBtn = document.querySelector('.gallery-prev');
+  const nextBtn = document.querySelector('.gallery-next');
+  let currentIndex = 0;
+  let interval;
+  
+  function showImage(index) {
+    images.forEach(img => img.classList.remove('active'));
+    indicators.forEach(ind => ind.classList.remove('active'));
+    images[index].classList.add('active');
+    indicators[index].classList.add('active');
+    currentIndex = index;
+  }
+  
+  function nextImage() {
+    let newIndex = (currentIndex + 1) % images.length;
+    showImage(newIndex);
+  }
+  
+  function prevImage() {
+    let newIndex = (currentIndex - 1 + images.length) % images.length;
+    showImage(newIndex);
+  }
+  
+  function startSlider() {
+    interval = setInterval(nextImage, 3000);
+  }
+  
+  function stopSlider() {
+    clearInterval(interval);
+  }
+  
+  nextBtn.addEventListener('click', function() {
+    nextImage();
+    stopSlider();
+    startSlider();
+  });
+  
+  prevBtn.addEventListener('click', function() {
+    prevImage();
+    stopSlider();
+    startSlider();
+  });
+  
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', function() {
+      showImage(index);
+      stopSlider();
+      startSlider();
+    });
+  });
+  
+  startSlider();
+  
+  document.querySelector('.image-gallery').addEventListener('mouseenter', stopSlider);
+  document.querySelector('.image-gallery').addEventListener('mouseleave', startSlider);
+}
+
+// تحميل الصفحة
+window.addEventListener("load", function() {
+  const loader = document.getElementById("loader");
+  loader.style.display = "none";
+});
+
+// زر الطلب العائم
 document.addEventListener("DOMContentLoaded", function() {
   const orderNowBtn = document.getElementById("orderNowBtn");
+  const nameInput = document.getElementById("name");
+  const topBarHeight = document.querySelector('.top-bar').offsetHeight;
+
   if (orderNowBtn) {
     orderNowBtn.addEventListener("click", function() {
-      const nameInput = document.getElementById("name");
-      const topBarHeight = document.querySelector('.top-bar')?.offsetHeight || 0;
       const topOffset = nameInput.getBoundingClientRect().top + window.scrollY - topBarHeight - 5;
       window.scrollTo({ top: topOffset, behavior: "smooth" });
       orderNowBtn.style.display = "none";
     });
 
     window.addEventListener('scroll', function() {
-      orderNowBtn.style.display = window.scrollY > 50 ? "none" : "block";
+      if (window.scrollY > 50) {
+        orderNowBtn.style.display = "none";
+      }
     });
   }
 });
+          <a class="whatsapp-button" href="https://wa.me/213770885813" target="_blank" title="تواصل عبر واتساب">
+  <img src="whatsapp.png" alt="WhatsApp"/>
+</a>
     </script>
-  <a class="whatsapp-button" href="https://wa.me/213797319624" target="_blank">
-    <img src="https://sarlofficesolution.com.dz/wp-content/uploads/2025/06/whatsapp.png" alt="واتساب">
-  </a>
+  
 </body>
 </html>
