@@ -340,10 +340,11 @@ button.submit-btn {
     <div class="form-header">
       <h2>أدخل معلوماتك أسفله التوصيل متوفر إلى 58 ولاية والدفع عند الاستلام</h2>
     </div>
-
+<div class="form-image-container">
+  <img src="landingpage.jpg" alt="description" class="form-image">
     
-    <!--<div class="form-body">
-      <form id="orderForm">-->
+    <div class="form-body">
+      <form id="orderForm">
 
          <span style="font-weight: bold; color: var(--primary-color); font-size: 26px;">7500 دج</span> 
   <span style="text-decoration: line-through; color: #6EC1E4; font-size: 23px; margin-left: 8px;">8200 دج</span>
@@ -437,9 +438,10 @@ button.submit-btn {
           </div>
           <button type="submit" class="submit-btn">إرسال الطلب</button>
         </div>
+      
         <div class="copyright-footer" style="text-align: center; padding: 5px; color: var(--text-color); font-size: 12px; background-color: var(--background-color);">
  كل الحقوق محفوظة لدى Copyright © 2025 - Office Solution
-<!--</div>-->
+</div>
 
 
         <script>
@@ -528,35 +530,31 @@ const phoneInput = document.getElementById('phone');
 const orderForm = document.getElementById('orderForm');
 const submitBtn = document.getElementById('submitBtn');
           
+// Load wilayas and communes data
 document.addEventListener('DOMContentLoaded', function() {
-  // Set landing page image
-  const landingImg = document.createElement('img');
-  landingImg.src = 'landingpage.jpg';
-  landingImg.alt = 'Product Image';
-  landingImg.style.width = '100%';
-  landingImg.style.maxHeight = '500px';
-  landingImg.style.objectFit = 'cover';
-  document.querySelector('.product-image').prepend(landingImg);
-
   loadWilayasAndCommunes();
   setupEventListeners();
+  initImageGallery();
   
-  // Initialize quantity controls
+  // Initialize quantity change listeners
   document.querySelector('.quantity-minus').addEventListener('click', () => changeQuantity(-1));
   document.querySelector('.quantity-plus').addEventListener('click', () => changeQuantity(1));
   quantityInput.addEventListener('input', updatePrices);
 });
 
-// Load wilayas and communes
+// Load wilayas and communes from JSON file
 function loadWilayasAndCommunes() {
   fetch('communes.json')
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
     .then(data => {
       populateWilayas(data);
       setupWilayaChangeListener(data);
     })
     .catch(error => {
-      console.error('Error loading data:', error);
+      console.error('Error loading the data:', error);
       wilayaSelect.innerHTML = '<option value="">خطأ في تحميل البيانات</option>';
     });
 }
@@ -565,11 +563,19 @@ function loadWilayasAndCommunes() {
 function populateWilayas(data) {
   wilayaSelect.innerHTML = '<option value="">اختر الولاية التوصيل للمنزل</option>';
   
-  const uniqueWilayas = [...new Map(data.map(item => 
-    [item.wilaya_code, {code: item.wilaya_code, name: item.wilaya_name}])).values()]
-    .sort((a, b) => a.code.localeCompare(b.code));
+  const wilayasMap = new Map();
+  data.forEach(item => {
+    if (!wilayasMap.has(item.wilaya_code)) {
+      wilayasMap.set(item.wilaya_code, {
+        code: item.wilaya_code,
+        name: item.wilaya_name
+      });
+    }
+  });
 
-  uniqueWilayas.forEach(wilaya => {
+  const sortedWilayas = Array.from(wilayasMap.values()).sort((a, b) => a.code.localeCompare(b.code));
+
+  sortedWilayas.forEach(wilaya => {
     const option = document.createElement('option');
     option.value = wilaya.code;
     option.textContent = `${wilaya.code} - ${wilaya.name}`;
@@ -584,15 +590,22 @@ function setupWilayaChangeListener(data) {
     communeSelect.innerHTML = '<option value="">اختر البلدية</option>';
     communeSelect.disabled = !selectedCode;
 
-    if (selectedCode) {
-      data.filter(item => item.wilaya_code === selectedCode)
-        .forEach(item => {
-          const option = document.createElement('option');
-          option.value = item.commune_name;
-          option.textContent = item.commune_name;
-          communeSelect.appendChild(option);
-        });
+    if (!selectedCode) {
+      updatePrices();
+      return;
     }
+
+    const communes = data.filter(item => item.wilaya_code === selectedCode);
+    
+    if (communes.length > 0) {
+      communes.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.commune_name;
+        option.textContent = item.commune_name;
+        communeSelect.appendChild(option);
+      });
+    }
+    
     updatePrices();
   });
 
@@ -604,26 +617,31 @@ function setupEventListeners() {
   orderForm.addEventListener('submit', submitOrder);
 }
 
-// Update prices
+// Update prices based on selections
 function updatePrices() {
   const wilaya = wilayaSelect.value;
   const quantity = parseInt(quantityInput.value) || 0;
   const subtotal = productPrice * quantity;
   
   if (wilaya && prices[wilaya]) {
-    let deliveryPrice = subtotal >= freeShippingThreshold ? 0 : prices[wilaya];
-    let total = subtotal + (subtotal >= freeShippingThreshold ? 0 : prices[wilaya]);
+    let deliveryPrice = prices[wilaya];
+    let total = subtotal + deliveryPrice;
     
-    deliveryPriceEl.innerHTML = subtotal >= freeShippingThreshold 
-      ? `<span style="text-decoration:line-through">${prices[wilaya]} دج</span> 0 دج` 
-      : `${deliveryPrice} دج`;
+    if (subtotal >= freeShippingThreshold) {
+      deliveryPrice = 0;
+      total = subtotal;
+      deliveryPriceEl.innerHTML = '<span style="text-decoration:line-through">' + prices[wilaya] + ' دج</span> 0 دج';
+    } else {
+      deliveryPriceEl.textContent = deliveryPrice + ' دج';
+    }
     
-    totalPriceEl.textContent = `${total} دج`;
+    totalPriceEl.textContent = total + ' دج';
   } else {
     deliveryPriceEl.textContent = 'اختر الولاية';
     totalPriceEl.textContent = '--';
   }
 }
+
 
 // Change quantity
 function changeQuantity(change) {
