@@ -356,49 +356,57 @@
       }
     }
 
-    // Submit order
-    function submitOrder(e) {
-      e.preventDefault();
-      
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-      
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const wilaya = wilayaSelect.options[wilayaSelect.selectedIndex].text;
-      const commune = communeSelect.value;
-      const address = document.getElementById('address').value;
-      const deliveryPrice = deliveryPriceEl.textContent;
-      const totalPrice = totalPriceEl.textContent;
-      const quantity = quantityInput.value;
-      
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbz-lFJDNcRdiG83Clxz8khntVXybN1HNwvI_EHf4IqWtbC6Z1aDAfE2HcgOutyWbx48/exec';
-      
-      const formData = new FormData();
-      const productName = document.querySelector('h2').textContent;
-      
-      formData.append('productName', productName.trim());
-      formData.append('name', name);
-      formData.append('phone', phone);
-      formData.append('wilaya', wilaya);
-      formData.append('commune', commune);
-      formData.append('address', address);
-      formData.append('deliveryPrice', deliveryPrice);
-      formData.append('totalPrice', totalPrice);
-      formData.append('quantity', quantity);
-      
-      fetch(scriptURL, { method: 'POST', body: formData })
-        .then(response => {
-          window.location.href = 'thankyou.html';
-        })
-        .catch(error => {
-          console.error('حدث خطأ أثناء إرسال الطلب:', error);
-          alert('حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'إرسال الطلب';
-        });
-    }
-
+   function submitOrder(e) {
+  e.preventDefault();
+  
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+  
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const wilaya = wilayaSelect.options[wilayaSelect.selectedIndex].text;
+  const commune = communeSelect.value;
+  const address = document.getElementById('address').value;
+  const deliveryPrice = deliveryPriceEl.textContent;
+  const totalPrice = totalPriceEl.textContent;
+  const quantity = quantityInput.value;
+  
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbz-lFJDNcRdiG83Clxz8khntVXybN1HNwvI_EHf4IqWtbC6Z1aDAfE2HcgOutyWbx48/exec';
+  
+  const formData = new FormData();
+  const productName = document.querySelector('h2').textContent;
+  
+  formData.append('productName', productName.trim());
+  formData.append('name', name);
+  formData.append('phone', phone);
+  formData.append('wilaya', wilaya);
+  formData.append('commune', commune);
+  formData.append('address', address);
+  formData.append('deliveryPrice', deliveryPrice); // تصحيح هنا من deliveryPrice إلى delivaryPrice إذا لزم الأمر
+  formData.append('totalPrice', totalPrice);
+  formData.append('quantity', quantity);
+  
+  fetch(scriptURL, { method: 'POST', body: formData })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.status === 'success') {
+        window.location.href = 'thankyou.html';
+      } else {
+        throw new Error(data.message || 'حدث خطأ غير متوقع');
+      }
+    })
+    .catch(error => {
+      console.error('حدث خطأ أثناء إرسال الطلب:', error);
+      alert('حدث خطأ أثناء إرسال الطلب: ' + error.message);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'إرسال الطلب';
+    });
+}
     // Image Gallery
     function initImageGallery() {
       const images = document.querySelectorAll('.gallery-image');
