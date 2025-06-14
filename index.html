@@ -31,15 +31,22 @@
     }
 
     /* حاوية النموذج */
-    .order-container {
-  max-width: 500px;
-  width: 100%;
-  margin: 30px auto;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    .order-container .container {
+  max-width: 450px;
+  margin: 20px auto;
+  background-color: var(--container-bg);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  border-top: 8px solid var(--primary-color);
+  position: relative;
   overflow: hidden;
-  border-top: 5px solid var(--primary-color);
+  background-image: url('logo.png');
+  background-size: 95% auto;
+  background-position: center 60%;
+  background-repeat: no-repeat;
+  background-blend-mode: overlay;
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 600px) {
