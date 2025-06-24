@@ -325,18 +325,19 @@
       const subtotal = productPrice * quantity;
       
       if (wilaya && prices[wilaya]) {
-        let deliveryPrice = prices[wilaya];
-        let total = subtotal + deliveryPrice;
-        
-        if (subtotal >= freeShippingThreshold) {
-          deliveryPrice = 0;
-          total = subtotal;
-          deliveryPriceEl.innerHTML = '<span style="text-decoration:line-through">' + prices[wilaya] + '</span> 0';
-        } else {
-          deliveryPriceEl.textContent = deliveryPrice;
-        }
-        
-        totalPriceEl.textContent = total;
+      let deliveryPrice = prices[wilaya];
+let total = subtotal; // لا تجمع سعر التوصيل
+
+// إظهار "توصيل مجاني" فقط في الواجهة
+deliveryPriceEl.textContent = 'توصيل مجاني';
+
+// عرض المجموع بدون توصيل
+totalPriceEl.textContent = total;
+
+// إرسال السعر الحقيقي في الخلفية إن وُجد
+if (hiddenDeliveryInput) hiddenDeliveryInput.value = deliveryPrice;
+if (hiddenTotalInput) hiddenTotalInput.value = total;
+
       } else {
         deliveryPriceEl.textContent = 'اختر الولاية';
         totalPriceEl.textContent = '--';
