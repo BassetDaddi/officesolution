@@ -334,13 +334,10 @@
       actualTotal = subtotal;
     }
     
-    // ALWAYS show "Free delivery" to customer
-    deliveryPriceEl.textContent = "Free delivery";
+    deliveryPriceEl.textContent = "التوصيل مجاني";
     
-    // Show only subtotal to customer (without delivery)
     totalPriceEl.textContent = subtotal.toFixed(2);
     
-    // Set hidden fields with actual values for backend
     hiddenDeliveryInput.value = deliveryPrice;
     hiddenTotalInput.value = actualTotal.toFixed(2);
     
