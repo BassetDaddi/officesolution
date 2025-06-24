@@ -318,43 +318,39 @@
       orderForm.addEventListener('submit', submitOrder);
     }
 
-    // Update prices based on selections
-    function updatePrices() {
-      const wilaya = wilayaSelect.value;
-      const quantity = parseInt(quantityInput.value);
-      const subtotal = productPrice * quantity;
-      
-      if (wilaya && prices[wilaya]) {
-        let deliveryPrice = prices[wilaya];
-        let total = subtotal + deliveryPrice;
-        
-        if (subtotal >= freeShippingThreshold) {
-          deliveryPrice = 0;
-          total = subtotal;
-          deliveryPriceEl.innerHTML = '<span style="text-decoration:line-through">' + prices[wilaya] + '</span> 0';
-        } else {
-          deliveryPriceEl.textContent = deliveryPrice;
-        }
-        
-        totalPriceEl.textContent = total;
-      } else {
-        deliveryPriceEl.textContent = 'اختر الولاية';
-        totalPriceEl.textContent = '--';
-      }
+   function updatePrices() {
+  const wilaya = wilayaSelect.value;
+  const quantity = parseInt(quantityInput.value) || 0;
+  const subtotal = productPrice * quantity;
+  
+  if (wilaya && prices[wilaya]) {
+    // Get actual delivery price
+    let deliveryPrice = prices[wilaya];
+    let actualTotal = subtotal + deliveryPrice;
+    
+    // Apply free shipping threshold if needed
+    if (subtotal >= freeShippingThreshold) {
+      deliveryPrice = 0;
+      actualTotal = subtotal;
     }
-
-    // Change quantity
-    function changeQuantity(change) {
-      let current = parseInt(quantityInput.value);
-      let newVal = current + change;
-      
-      if (newVal >= 1 && newVal <= 10) {
-        quantityInput.value = newVal;
-        quantityInput.classList.add('highlight');
-        setTimeout(() => quantityInput.classList.remove('highlight'), 500);
-        updatePrices();
-      }
-    }
+    
+    // ALWAYS show "Free delivery" to customer
+    deliveryPriceEl.textContent = "Free delivery";
+    
+    // Show only subtotal to customer (without delivery)
+    totalPriceEl.textContent = subtotal.toFixed(2);
+    
+    // Set hidden fields with actual values for backend
+    hiddenDeliveryInput.value = deliveryPrice;
+    hiddenTotalInput.value = actualTotal.toFixed(2);
+    
+  } else {
+    deliveryPriceEl.textContent = 'اختر الولاية';
+    totalPriceEl.textContent = '--';
+    hiddenDeliveryInput.value = '';
+    hiddenTotalInput.value = '';
+  }
+}
 
    function submitOrder(e) {
   e.preventDefault();
