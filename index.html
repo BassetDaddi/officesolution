@@ -113,26 +113,7 @@
         </a>
       </div>
       
-      <div class="order-summary-section">
-        <div class="price-box">
-          <div>
-            <span>سعر المنتج:</span>
-            <span id="productPrice">7500</span>
-            <span>دج</span>
-          </div>
-          <div>
-            <span>سعر التوصيل:</span>
-            <span id="deliveryPrice">إختر الولاية</span>
-            <span>دج</span>
-          </div>
-          <div class="total-price">
-            <span>المجموع:</span>
-            <span id="totalPrice">--</span>
-            <span>دج</span>
-          </div>
-        </div>
-        
-        <div class="action-container">
+    <div class="action-container">
           <div class="quantity-control">
             <button type="button" onclick="changeQuantity(-1)">-</button>
             <input type="text" id="quantity" value="1" readonly>
@@ -140,9 +121,6 @@
           </div>
           <button type="submit" class="submit-btn">إرسال الطلب</button>
         </div>
-      </div>
-    </form>
-  </div>
   
   <div class="copyright-footer" style="text-align: center; padding: 5px; color: var(--text-color); font-size: 12px; background-color: var(--background-color);">
     كل الحقوق محفوظة لدى Copyright © 2025 - Office Solution
@@ -318,39 +296,43 @@
       orderForm.addEventListener('submit', submitOrder);
     }
 
-function updatePrices() {
-  const wilaya = wilayaSelect.value;
-  const quantity = parseInt(quantityInput.value) || 0;
-  const subtotal = productPrice * quantity;
-  
-  if (wilaya && prices[wilaya]) {
-    // Get actual delivery price
-    let deliveryPrice = prices[wilaya];
-    let actualTotal = subtotal + deliveryPrice;
-    
-    // Apply free shipping threshold if needed
-    if (subtotal >= freeShippingThreshold) {
-      deliveryPrice = 0;
-      actualTotal = subtotal;
-    }
-    
-    // ALWAYS show "Free delivery" to customer
-    deliveryPriceEl.textContent = "Free delivery";
-    
-    // Show only subtotal to customer (without delivery)
-    totalPriceEl.textContent = subtotal.toFixed(2);
-    
-    // Set hidden fields with actual values for backend
-    hiddenDeliveryInput.value = deliveryPrice;
-    hiddenTotalInput.value = actualTotal.toFixed(2);
-    
-  } else {
-    deliveryPriceEl.textContent = 'اختر الولاية';
-    totalPriceEl.textContent = '--';
-    hiddenDeliveryInput.value = '';
-    hiddenTotalInput.value = '';
-  }
+// Update prices based on selections
+    function updatePrices() {
+      const wilaya = wilayaSelect.value;
+      const quantity = parseInt(quantityInput.value);
+      const subtotal = productPrice * quantity;
+      
+      if (wilaya && prices[wilaya]) {
+let deliveryPrice = prices[wilaya];
+let total = subtotal + deliveryPrice;
+
+if (subtotal >= freeShippingThreshold) {
+  deliveryPrice = 0;
+  total = subtotal;
+  deliveryPriceEl.innerHTML = '<span style="text-decoration:line-through">' + prices[wilaya] + '</span> 0';
+} else {
+  deliveryPriceEl.textContent = deliveryPrice;
 }
+
+totalPriceEl.textContent = total;
+} else {
+        deliveryPriceEl.textContent = 'اختر الولاية';
+        totalPriceEl.textContent = '--';
+      }
+    }
+
+    // Change quantity
+    function changeQuantity(change) {
+      let current = parseInt(quantityInput.value);
+      let newVal = current + change;
+      
+      if (newVal >= 1 && newVal <= 10) {
+        quantityInput.value = newVal;
+        quantityInput.classList.add('highlight');
+        setTimeout(() => quantityInput.classList.remove('highlight'), 500);
+        updatePrices();
+      }
+    }
    function submitOrder(e) {
   e.preventDefault();
   
