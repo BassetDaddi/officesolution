@@ -32,7 +32,7 @@
   <div class="top-bar">
     <img src="logo.png" alt="شعار المتجر" class="top-bar-logo">
     <div class="top-bar-content">
-      <p>التوصيل متوفر الى 58 ولاية</p>
+      <p>التوصيل مجاني الى 58 ولاية</p>
       <p>والدفع عند الاستلام، مرحبا بكم</p>
     </div>
     <div class="theme-switcher">
@@ -75,23 +75,23 @@
     <span id="countdown" style="color: #80c1e6; font-size: 20px; font-weight: bold; float: left;"></span>
     
     <form id="orderForm">
-      <div class="form-image-container">
-        <img src="description.jpg" alt="description" class="form-image">
-      </div>
-      <input type="text" id="name" placeholder="أدخل الاسم الكامل" required>
+      <h2>من فضلك أدخلي معلوماتك أسفله للطلب</h2>
+      <label><strong>👤 الاسم الكامل</strong></label>
+      <input type="text" id="name" placeholder="أدخل الاسم الكامل">
+      <label><strong>📞 رقم الهاتف</strong></label>
       <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" required style="text-align: right;">
-      
+      <label><strong>📍 الولاية</strong></label>
       <div class="location-selectors">
-        <select id="wilayaSelect" class="p-2 border rounded" required>
+        <select id="wilayaSelect" class="p-2 border rounded">
           <option value="">اختر الولاية التوصيل للمنزل</option>
         </select>
-
-        <select id="communeSelect" class="p-2 border rounded" required disabled>
+        <label><strong>🏘️ البلدية</strong></label>
+        <select id="communeSelect" class="p-2 border rounded" disabled>
           <option value="">اختر البلدية</option>
         </select>
       </div>
-      
-      <input type="text" id="address" placeholder="أدخل العنوان بالتفصيل" required>
+      <label><strong>📫 العنوان الكامل</strong></label>      
+      <input type="text" id="address" placeholder="أدخل العنوان بالتفصيل">
       
       <div class="trust-badges">
         <div class="trust-badge">
@@ -159,6 +159,9 @@
           </div>
           <button type="submit" class="submit-btn">إرسال الطلب</button>
         </div>
+      </div>
+      <div class="form-image-container">
+        <img src="description.jpg" alt="description" class="form-image">
       </div>
     </form>
   </div>
